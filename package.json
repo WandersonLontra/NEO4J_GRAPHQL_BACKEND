@@ -1,0 +1,25 @@
+{
+  "name": "testando",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/server.js -e js,gql",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@graphql-tools/load-files": "^6.5.3",
+    "@graphql-tools/merge": "^8.2.1",
+    "@neo4j/graphql": "^2.5.5",
+    "apollo-server": "^3.6.2",
+    "dotenv": "^14.2.0",
+    "graphql": "^16.2.0",
+    "neo4j-driver": "^4.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}

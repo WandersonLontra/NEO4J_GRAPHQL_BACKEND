@@ -1,0 +1,4 @@
+interface ratedOn @relationshipProperties {
+    movieTitle: String!
+    rating: Float!
+}

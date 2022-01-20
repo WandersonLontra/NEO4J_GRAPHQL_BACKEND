@@ -1,0 +1,22 @@
+type User {
+    _id: ID!
+    name: String!
+    rated: [Movie] @relationship(type: "RATED", properties: "ratedOn", direction: OUT)
+    recommendedMovies(limit: Int = 25): [Movie] @cypher (statement: """
+      MATCH (this)-[x:RATED]->(movie:Movie)
+      WITH this, gds.alpha.similarity.asVector(movie, x.rating) AS u1Vector
+      MATCH (u2:User)-[x2:RATED]->(movie:Movie) WHERE u2 <> this
+
+      WITH this, u2, u1Vector, gds.alpha.similarity.asVector(movie, x2.rating) AS u2Vector
+
+      WITH this, u2,  gds.alpha.similarity.pearson(u1Vector, u2Vector, {vectorType: 'maps'}) AS similarity
+      ORDER BY similarity DESC
+      LIMIT 10
+
+      MATCH (u2)-[r:RATED]->(m:Movie) WHERE NOT EXISTS( (this)-[:RATED]->(m) )
+      WITH m, SUM( similarity * r.rating) AS score
+      RETURN m
+      ORDER BY score DESC LIMIT $limit
+
+   """)
+}

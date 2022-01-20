@@ -1,0 +1,23 @@
+type Movie {
+    title: String
+    year: Int
+    imdbRating: Float
+    genres: [Genre] @relationship(type: "IN_GENRE", direction: OUT)
+    ratedByUser: [User] @relationship(type: "RATED", properties: "ratedOn", direction: IN)
+    similarMovies(limit: Int = 10): [Movie] @cypher(statement: """
+    MATCH (this)-[:IN_GENRE|:ACTED_IN|:DIRECTED]-(t)<-[:IN_GENRE|:ACTED_IN|:DIRECTED]-(other:Movie)
+    WITH this, other, COUNT(t) AS intersection, COLLECT(t.name) AS i
+    MATCH (this)-[:IN_GENRE|:ACTED_IN|:DIRECTED]-(mt)
+    WITH this,other, intersection,i, COLLECT(mt.name) AS s1
+    MATCH (other)-[:IN_GENRE|:ACTED_IN|:DIRECTED]-(ot)
+    WITH this,other,intersection,i, s1, COLLECT(ot.name) AS s2
+
+    WITH this,other,intersection,s1,s2
+
+    WITH this,other,intersection,s1+[x IN s2 WHERE NOT x IN s1] AS union, s1, s2
+    with other, ((1.0*intersection)/SIZE(union)) AS jaccard
+
+    RETURN other
+    ORDER BY jaccard DESC LIMIT $limit
+   """)
+}
