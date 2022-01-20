@@ -2,3 +2,8 @@ interface ratedOn @relationshipProperties {
     movieTitle: String!
     rating: Float!
 }
+
+interface actedIn @relationshipProperties {
+    actorsName: String!
+    role: String!
+}

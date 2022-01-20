@@ -1,0 +1,7 @@
+type Person {
+    _id: ID!
+    name: String!
+    imageUrl: String
+    acted_in: [Movie] @relationship(type: "ACTED_IN", properties: "actedIn", direction: OUT)
+    directed: [Movie] @relationship(type: "DIRECTED", direction: OUT)
+}

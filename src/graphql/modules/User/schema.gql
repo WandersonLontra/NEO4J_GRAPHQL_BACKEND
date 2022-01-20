@@ -1,8 +1,9 @@
 type User {
     _id: ID!
     name: String!
+    liked_genres: [Genre] @relationship(type: "LIKED_GENRES", direction: OUT)
     rated: [Movie] @relationship(type: "RATED", properties: "ratedOn", direction: OUT)
-    recommendedMovies(limit: Int = 25): [Movie] @cypher (statement: """
+    recommendedMovies(limit: Int = 10): [Movie] @cypher (statement: """
       MATCH (this)-[x:RATED]->(movie:Movie)
       WITH this, gds.alpha.similarity.asVector(movie, x.rating) AS u1Vector
       MATCH (u2:User)-[x2:RATED]->(movie:Movie) WHERE u2 <> this

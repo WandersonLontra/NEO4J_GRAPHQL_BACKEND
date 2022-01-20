@@ -1,7 +1,9 @@
 type Movie {
-    title: String
-    year: Int
+    _id: ID!
+    title: String!
+    year: Int!
     imdbRating: Float
+    imageUrl: String
     genres: [Genre] @relationship(type: "IN_GENRE", direction: OUT)
     ratedByUser: [User] @relationship(type: "RATED", properties: "ratedOn", direction: IN)
     similarMovies(limit: Int = 10): [Movie] @cypher(statement: """
