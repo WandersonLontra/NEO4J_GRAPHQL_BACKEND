@@ -4,8 +4,11 @@ type Movie {
     year: Int!
     imdbRating: Float
     imageUrl: String
+    plot: String
     genres: [Genre] @relationship(type: "IN_GENRE", direction: OUT)
     ratedByUser: [User] @relationship(type: "RATED", properties: "ratedOn", direction: IN)
+    actors: [Person] @relationship(type: "ACTED_IN", properties: "actedIn", direction: IN)
+    director: [Person] @relationship(type: "DIRECTED", direction: IN)
     similarMovies(limit: Int = 10): [Movie] @cypher(statement: """
     MATCH (this)-[:IN_GENRE|:ACTED_IN|:DIRECTED]-(t)<-[:IN_GENRE|:ACTED_IN|:DIRECTED]-(other:Movie)
     WITH this, other, COUNT(t) AS intersection, COLLECT(t.name) AS i

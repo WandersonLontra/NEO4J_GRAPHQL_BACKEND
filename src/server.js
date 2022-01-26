@@ -17,9 +17,13 @@ const driver = neo4j.driver(
 
 const neoSchema = new Neo4jGraphQL({ typeDefs, driver });
 
+const host = process.env.GRAPHQL_HOST || '127.0.0.1'
+const port = process.env.GRAPHQL_PORT || 4000
+const endpoint = process.env.GRAPHQL_ENDPOINT || '/graphql'
+
 const server = new ApolloServer({
     schema: neoSchema.schema,
     context: ({ req }) => ({ req }),
 });
 
-server.listen(4000).then(({url}) => console.log(`🔥 Server running at ${url}`));
+server.listen({host,port,endpoint}).then(({url}) => console.log(`🔥 Server running at http://${host}:${port}${endpoint}`));
