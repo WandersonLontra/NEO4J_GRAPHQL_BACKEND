@@ -7,3 +7,7 @@ interface actedIn @relationshipProperties {
     actorsName: String!
     role: String!
 }
+
+interface ratedGenres @relationshipProperties {
+    rating: Float!
+}

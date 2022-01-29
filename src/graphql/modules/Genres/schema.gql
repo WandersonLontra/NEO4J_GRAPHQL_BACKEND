@@ -1,4 +1,5 @@
 type Genre {
     name: String
     movies: [Movie] @relationship(type: "IN_GENRE", direction: IN)
+    likedByUser: [User] @relationship(type: "RATED", properties: "ratedGenres", direction: IN)
 }
