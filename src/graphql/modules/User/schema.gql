@@ -1,7 +1,7 @@
 type User {
     _id: ID!
     name: String!
-    liked_genres: [Genre] @relationship(type: "LIKED_GENRES", properties: "ratedGenres", direction: OUT)
+    liked_genres: [Genre] @relationship(type: "LIKED_GENRES", direction: OUT)
     rated: [Movie] @relationship(type: "RATED", properties: "ratedOn", direction: OUT)
     recommendedMovies(limit: Int = 10): [Movie] @cypher (statement: """
       MATCH (this)-[x:RATED]->(movie:Movie)
@@ -20,18 +20,18 @@ type User {
       ORDER BY score DESC LIMIT $limit
    """)
     recommendedByGenres(limit: Int = 100): [Movie] @cypher (statement: """
-      MATCH (this)-[x:LIKED_GENRES]-(t)<-[:IN_GENRE]-(movie:Movie)
-      WITH this,movie, COUNT(t) AS intersection, COLLECT(movie.title)AS r WHERE intersection >= 2
-      MATCH (this)-[:LIKED_GENRES]-(mt)
-      WITH this,movie,intersection,r, COLLECT(mt.name) AS R1
-      MATCH (movie)-[:IN_GENRE]-(ot)
-      WITH this,movie,intersection,r,R1, COLLECT(ot.name) AS R2
+      MATCH (this)-[x:LIKED_GENRES]-(g)<-[:IN_GENRE]-(movie:Movie)
+      WITH this,movie, COUNT(g) AS intersection, COLLECT(movie.title)AS r WHERE intersection >= 2
+      MATCH (this)-[:LIKED_GENRES]-(ug)
+      WITH this,movie,intersection,r, COLLECT(ug.name) AS R1
+      MATCH (movie)-[:IN_GENRE]-(mg)
+      WITH this,movie,intersection,r,R1, COLLECT(mg.name) AS R2
       WITH this,movie,intersection,r,R1,R2
-      WITH this,movie,intersection,R1+[x IN R2 WHERE x IN R1] AS union, R1, R2
+      WITH this,movie,intersection,R1+[x IN R2 WHERE NOT x IN R1] AS union, R1, R2
       WITH movie, ((1.0 * intersection)/SIZE(union)) AS calc
       RETURN movie
       ORDER BY calc DESC 
    """)
 }
 
-# WHERE size(apoc.coll.intersection([category in u1Vector], [category in u2Vector])) >= 1
+# WHERE size(apoc.coll.intersection([v IN u1Vector| v.category], [v IN u2Vector | v.category ])) >= 1 

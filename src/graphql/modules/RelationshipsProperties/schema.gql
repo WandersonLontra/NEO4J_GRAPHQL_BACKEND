@@ -8,6 +8,3 @@ interface actedIn @relationshipProperties {
     role: String!
 }
 
-interface ratedGenres @relationshipProperties {
-    rating: Float!
-}
