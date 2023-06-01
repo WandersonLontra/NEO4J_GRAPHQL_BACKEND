@@ -16,7 +16,7 @@ jobs:
           curl -X POST \
             -H "Content-Type: application/json" \
             -d '{"query": "mutation Login($userType: UserType!, $email: String!, $password: String!){ login(userType: $userType, email: $email, password: $password) { token } }", "variables": {"userType": "Professor", "email": "contato@jovensgenios.com", "password": "JGs$cret1971."}}' \
-            https://api.example.com/graphql \
+            https://ecs-api-stage.jovensgenios.com/graphql \
             | jq -r '.data.login.token' \
             > token.txt
           echo "Token:"
@@ -29,7 +29,7 @@ jobs:
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer $token" \
             -d '{"query": "{ users { id name email } }"}' \
-            https://api.example.com/graphql \
+            https://ecs-api-stage.jovensgenios.com/graphql \
             | jq -r '.data.users[] | "User ID: \(.id), Name: \(.name), Email: \(.email)"' \
             > users.txt
           echo "Users:"
