@@ -1,0 +1,26 @@
+name: Fetch GraphQL Data
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fetch-data:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Fetch data from GraphQL API
+      run: |
+        curl -X POST \
+          -H "Content-Type: application/json" \
+          -d '{"query": "mutation Login($userType: UserType!, $email: String!, $password: String!){ login(userType: $userType, email: $email, password: $password) { token } }", "variables": {"userType": "Professor", "email": "contato@jovensgenios.com", "password": "JGs$cret1971."}}' \
+          https://ecs-api-stage.jovensgenios.com/graphql \
+          > data.json
+
+    - name: Upload data file
+      uses: actions/upload-artifact@v2
+      with:
+        name: data
+        path: data.json
