@@ -22,7 +22,7 @@ jobs:
             -H "Content-Type: application/json" \
             -d '{"query": "mutation Login{ login(userType: Professor, email: "contato@jovensgenios.com", password: "JGs$cret1971.") { token } }"}' \
             https://ecs-api-stage.jovensgenios.com/graphql)
-          if ["$(echo "$response" | jq -r '.data.login.token')" != "null"]; then
+          if ["$(echo "$response")" != "null"]; then
             echo "Token:"
             echo "$response" | jq -r '.data.login.token'
             echo "TOKEN=$("$response" | jq -r '.data.login.token')" >> $GITHUB_ENV
