@@ -30,7 +30,7 @@ jobs:
             -H "Authorization: Bearer $token" \
             -d '{"query": "query GetProfessor{ Professor(email: "contato@jovensgenios.com") { id name email } }"}' \
             https://ecs-api-stage.jovensgenios.com/graphql \
-            | jq -r '.data.Professor[] | "Professor ID: \(.id), Name: \(.name), Email: \(.email)"' \
+            | jq -r '.data.Professor[0] | "Professor ID: \(.id), Name: \(.name), Email: \(.email)"' \
             > users.txt
           echo "Users:"
           cat users.txt
