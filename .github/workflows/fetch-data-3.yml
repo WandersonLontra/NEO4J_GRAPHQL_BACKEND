@@ -20,15 +20,15 @@ jobs:
         run: |
           response=$(curl -X POST \
             -H "Content-Type: application/json" \
-            -d '{"query": "mutation Login($userType: UserType!, $email: String!, $password: String!){ login(userType: $userType, email: $email, password: $password) { token } }", "variables": {"userType": "Professor", "email": "contato@jovensgenios.com", "password": "JGs$cret1971."}}' \
+            -d '{"query": "mutation Login{ login(userType: Professor, email: "contato@jovensgenios.com", password: "JGs$cret1971.") { token } }"}' \
             https://ecs-api-stage.jovensgenios.com/graphql)
-            if ["$(echo "$response" | jq -r '.data.login.token')" != "null"]; then
-              echo "Token:"
-              echo "$response" | jq -r '.data.login.token'
-              echo "TOKEN=$("$response" | jq -r '.data.login.token')" >> $GITHUB_ENV
-            else
-              echo "Error: any token was provided"
-            fi
+          if ["$(echo "$response" | jq -r '.data.login.token')" != "null"]; then
+            echo "Token:"
+            echo "$response" | jq -r '.data.login.token'
+            echo "TOKEN=$("$response" | jq -r '.data.login.token')" >> $GITHUB_ENV
+          else
+            echo "Error: any token was provided"
+          fi
 
       # - name: Use token to make GraphQL request
       #   run: |
