@@ -16,39 +16,21 @@ jobs:
           curl -X POST \
             -H "Content-Type: application/json" \
             -d '{"query": "mutation Login($userType: UserType!, $email: String!, $password: String!){ login(userType: $userType, email: $email, password: $password) { token } }", "variables": {"userType": "Professor", "email": "contato@jovensgenios.com", "password": "JGs$cret1971."}}' \
-            https://ecs-api-stage.jovensgenios.com/graphql \
-            > data.json
-
-      - name: Upload data file
-        uses: actions/upload-artifact@v2
-        with:
-          name: data
-          path: data.json
-
-  use-token:
-    needs: fetch-data
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download data file
-        uses: actions/download-artifact@v2
-        with:
-          name: data
+            https://api.example.com/graphql \
+            | jq -r '.data.login.token' \
+            > token.txt
+          echo "Token:"
+          cat token.txt
 
       - name: Use token to make GraphQL request
         run: |
-          token=$(cat data.json | jq -r '.data.login.token')
+          token=$(cat token.txt)
           curl -X POST \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer $token" \
-            -d '{"query": "query GetProfessor{ Professor(email: "contato@jovensgenios.com") { id name email } }"}' \
-            https://ecs-api-stage.jovensgenios.com/graphql \
-            > users.json
-          echo "Professors:"
-          cat users.json
-
-      - name: Upload users file
-        uses: actions/upload-artifact@v2
-        with:
-          name: users
-          path: users.json
+            -d '{"query": "{ users { id name email } }"}' \
+            https://api.example.com/graphql \
+            | jq -r '.data.users[] | "User ID: \(.id), Name: \(.name), Email: \(.email)"' \
+            > users.txt
+          echo "Users:"
+          cat users.txt
