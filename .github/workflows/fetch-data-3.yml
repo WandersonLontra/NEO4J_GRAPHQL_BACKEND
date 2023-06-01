@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  fetch-data:
+  get-token:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,12 +24,16 @@ jobs:
             https://ecs-api-stage.jovensgenios.com/graphql \
             | jq -r '.data.login.token' \
             > token.txt
-          echo "Token:"
-          cat token.txt
+          echo "TOKEN=$(cat token.txt)" >> $GITHUB_ENV
 
+  fetch-data:
+    needs: get-token
+    runs-on: ubuntu-latest
+
+      steps:
       - name: Use token to make GraphQL request
         run: |
-          token=$(cat token.txt)
+          token=$(echo "${{ secrets.TOKEN }}")
           curl -X POST \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer $token" \
