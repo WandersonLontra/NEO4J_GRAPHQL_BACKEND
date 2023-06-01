@@ -20,7 +20,7 @@ jobs:
         run: |
           response=$(curl -X POST \
             -H "Content-Type: application/json" \
-            -d '{"query": "mutation Login{ login(userType: Professor, email: "contato@jovensgenios.com", password: "JGs$cret1971.") { token } }"}' \
+            -d '{"query": "mutation Login{ login(userType: Admin, email: "contato@jovensgenios.com", password: "JGs$cret1971.") { token } }"}' \
             https://ecs-api-stage.jovensgenios.com/graphql)
           if ["$(echo "$response")" != "null"]; then
             echo "Token:"
