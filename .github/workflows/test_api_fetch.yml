@@ -3,16 +3,20 @@ name: Test fetch token from JG
 on: 
 # Triggers the workflow every 5 minutes
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/1 * * * *"
     
 jobs:
   get-token:
     runs-on: ubuntu-latest
     steps:
       - name: Fetch API Data
+        id: getToken
         uses: JamesIves/fetch-api-data-action@v2.2.4
         with: 
           token-endpoint: https://ecs-api-stage.jovensgenios.com/graphql
           token-configuration: '{"method":"POST","body":{"query":"mutation Login{\\n  login(userType: Admin, email: \\"contato@jovensgenios.com\\", password: \\"JGs$cret1971.\\") {\\n    token\\n  }\\n}"}}'
-          endpoint: https://ecs-api-stage.jovensgenios.com/graphql
-          configuration: '{ "method": "POST", "headers": {"Authorization": "Bearer {{{ data.login.token }}}"}, "body": {"query": "query GetProfessor{\\n  Professor(email: \\"contato@jovensgenios.com\\") {\\n    id\\n    name\\n  }\\n}"} }'
+          #endpoint: https://ecs-api-stage.jovensgenios.com/graphql
+          #configuration: '{ "method": "POST", "headers": {"Authorization": "Bearer {{{ data.login.token }}}"}, "body": {"query": "query GetProfessor{\\n  Professor(email: \\"contato@jovensgenios.com\\") {\\n    id\\n    name\\n  }\\n}"} }'
+     
+      - name: Show Response
+        run: echo ${{ steps.getToken.outputs }}
