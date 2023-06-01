@@ -15,7 +15,7 @@ jobs:
         uses: JamesIves/fetch-api-data-action@v2.2.4
         with: 
           endpoint: https://ecs-api-stage.jovensgenios.com/graphql
-          configuration: '{"method":"POST","body":{"query":"mutation Login{\\n  login(userType: Admin, email: \\"contato@jovensgenios.com\\", password: \\"JGs$cret1971.\\") {\\n    token\\n  }\\n}"}}'
+          configuration: '{"method":"POST","body":{"query":mutation Login{\\n  login(userType: Admin, email: \\"contato@jovensgenios.com\\", password: \\"JGs$cret1971.\\") {\\n    "token"\\n  }\\n}"}}'
           set-output: true
       - name: Show Response
         run: echo ${{ steps.getToken.outputs }}
