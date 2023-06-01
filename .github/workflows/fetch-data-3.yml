@@ -28,9 +28,9 @@ jobs:
           curl -X POST \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer $token" \
-            -d '{"query": "{ users { id name email } }"}' \
+            -d '{"query": "query GetProfessor{ Professor(email: "contato@jovensgenios.com") { id name email } }"}' \
             https://ecs-api-stage.jovensgenios.com/graphql \
-            | jq -r '.data.users[] | "User ID: \(.id), Name: \(.name), Email: \(.email)"' \
+            | jq -r '.data.Professor[] | "Professor ID: \(.id), Name: \(.name), Email: \(.email)"' \
             > users.txt
           echo "Users:"
           cat users.txt
