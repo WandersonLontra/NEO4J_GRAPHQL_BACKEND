@@ -24,6 +24,8 @@ jobs:
             https://ecs-api-stage.jovensgenios.com/graphql \
             | jq -r '.data.login.token' \
             > token.txt
+          echo "Token:"
+          cat token.txt
 
       - name: Use token to make GraphQL request
         run: |
@@ -31,7 +33,7 @@ jobs:
           curl -X POST \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer $token" \
-            -d '{"query": "query GetProfessor{ Professor(email: "contato@jovensgenios.com") { id name email } }"}' \
+            -d '{"query": "query GetProfessor{ Professor(email: "contato@jovensgenios.com") { email } }"}' \
             https://ecs-api-stage.jovensgenios.com/graphql \
             | jq -r '.data.Professor[]' \
             > users.txt
