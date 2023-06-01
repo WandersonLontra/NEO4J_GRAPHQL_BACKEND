@@ -26,11 +26,6 @@ jobs:
             > token.txt
           echo "TOKEN=$(cat token.txt)" >> $GITHUB_ENV
 
-  fetch-data:
-    needs: get-token
-    runs-on: ubuntu-latest
-
-      steps:
       - name: Use token to make GraphQL request
         run: |
           token=$(echo "${{ secrets.TOKEN }}")
