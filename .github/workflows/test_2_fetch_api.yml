@@ -16,7 +16,7 @@ jobs:
         with: 
           url: 'https://ecs-api-stage.jovensgenios.com/graphql'
           method: 'POST'
-          data: '{\n  "body": {\n    "query": "\\n\\t\\t\\t\\t\\tmutation Login($userType: UserType!, $email: String!, $password: String!){\\n\\t\\t\\t\\t\\t\\tlogin(userType: $userType, email: $email, password: $password) {\\n\\t\\t\\t\\t\\t\\t\\ttoken\\n\\t\\t\\t\\t\\t\\t}\\n\\t\\t\\t\\t\\t}\\n          \\t\\t",\n    "variables": {\n      "email": "contato@jovengenios.com",\n      "password": "JGs$cret1971.",\n      "userType": "Professor"\n    }\n  }\n}'
+          body: '{\n    "query": "\\n\\t\\t\\t\\t\\tmutation Login($userType: UserType!, $email: String!, $password: String!){\\n\\t\\t\\t\\t\\t\\tlogin(userType: $userType, email: $email, password: $password) {\\n\\t\\t\\t\\t\\t\\t\\ttoken\\n\\t\\t\\t\\t\\t\\t}\\n\\t\\t\\t\\t\\t}\\n          \\t\\t",\n    "variables": {\n      "email": "contato@jovengenios.com",\n      "password": "JGs$cret1971.",\n      "userType": "Professor"\n    }\n  }'
           preventFailureOnNoResponse: 'true'
           ignoreStatusCodes: '401'
       - name: Show Response
