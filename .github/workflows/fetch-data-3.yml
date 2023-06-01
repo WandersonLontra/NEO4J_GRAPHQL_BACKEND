@@ -18,23 +18,27 @@ jobs:
 
       - name: Fetch data from GraphQL API
         run: |
-          curl -X POST \
+          response=$(curl -X POST \
             -H "Content-Type: application/json" \
             -d '{"query": "mutation Login($userType: UserType!, $email: String!, $password: String!){ login(userType: $userType, email: $email, password: $password) { token } }", "variables": {"userType": "Professor", "email": "contato@jovensgenios.com", "password": "JGs$cret1971."}}' \
-            https://ecs-api-stage.jovensgenios.com/graphql \
-            | jq -r '.data.login.token' \
-            > token.json
-          echo "TOKEN=$(cat token.json)" >> $GITHUB_ENV
+            https://ecs-api-stage.jovensgenios.com/graphql)
+            if ["$(echo "$response" | jq -r '.data.login.token')" != "null"]; then
+              echo "Token:"
+              echo "$response" | jq -r '.data.login.token'
+              echo "TOKEN=$("$response" | jq -r '.data.login.token')" >> $GITHUB_ENV
+            else
+              echo "Error: any token was provided"
+            fi
 
-      - name: Use token to make GraphQL request
-        run: |
-          token=$(echo "${{ secrets.TOKEN }}")
-          curl -X POST \
-            -H "Content-Type: application/json" \
-            -H "Authorization: Bearer $token" \
-            -d '{"query": "query GetProfessor{ Professor(email: "contato@jovensgenios.com") { email } }"}' \
-            https://ecs-api-stage.jovensgenios.com/graphql \
-            | jq -r '.data.Professor[]' \
-            > users.json
-          echo "Users:"
-          cat users.json
+      # - name: Use token to make GraphQL request
+      #   run: |
+      #     token=$(echo "${{ secrets.TOKEN }}")
+      #     curl -X POST \
+      #       -H "Content-Type: application/json" \
+      #       -H "Authorization: Bearer $token" \
+      #       -d '{"query": "query GetProfessor{ Professor(email: "contato@jovensgenios.com") { email } }"}' \
+      #       https://ecs-api-stage.jovensgenios.com/graphql \
+      #       | jq -r '.data.Professor[]' \
+      #       > users.json
+      #     echo "Users:"
+      #     cat users.json
