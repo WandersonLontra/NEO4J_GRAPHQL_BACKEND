@@ -23,8 +23,8 @@ jobs:
             -d '{"query": "mutation Login($userType: UserType!, $email: String!, $password: String!){ login(userType: $userType, email: $email, password: $password) { token } }", "variables": {"userType": "Professor", "email": "contato@jovensgenios.com", "password": "JGs$cret1971."}}' \
             https://ecs-api-stage.jovensgenios.com/graphql \
             | jq -r '.data.login.token' \
-            > token.txt
-          echo "TOKEN=$(cat token.txt)" >> $GITHUB_ENV
+            > token.json
+          echo "TOKEN=$(cat token.json)" >> $GITHUB_ENV
 
       - name: Use token to make GraphQL request
         run: |
@@ -35,6 +35,6 @@ jobs:
             -d '{"query": "query GetProfessor{ Professor(email: "contato@jovensgenios.com") { email } }"}' \
             https://ecs-api-stage.jovensgenios.com/graphql \
             | jq -r '.data.Professor[]' \
-            > users.txt
+            > users.json
           echo "Users:"
-          cat users.txt
+          cat users.json
