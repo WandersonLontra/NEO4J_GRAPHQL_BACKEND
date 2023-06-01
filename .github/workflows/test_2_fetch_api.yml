@@ -1,0 +1,23 @@
+name: Test fetch token from JG
+
+on: 
+  workflow_dispatch:
+# Triggers the workflow every minute
+#   schedule:
+#     - cron: "*/5 * * * *"
+    
+jobs:
+  get-token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: HTTP Request Action
+        uses: fjogeleit/http-request-action@v1.14.0
+        id: getToken
+        with: 
+          url: 'https://ecs-api-stage.jovensgenios.com/graphql'
+          method: 'POST'
+          customHeaders: '{"Content-Type": "application/json"}'
+          data: '{"query":"mutation Login{\\n  login(userType: Admin, email: \\"contato@jovensgenios.com\\", password: \\"JGs$cret1971.\\") {\\n    token\\n  }\\n}"}'
+          preventFailureOnNoResponse: 'true'
+      - name: Show Response
+        run: echo ${{ steps.getToken.outputs.response }}
