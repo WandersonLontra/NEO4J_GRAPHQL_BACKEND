@@ -1,4 +1,4 @@
-name: Test fetch token from JG
+name: Test 2 fetch token from JG
 
 on: 
   workflow_dispatch:
@@ -19,5 +19,7 @@ jobs:
           customHeaders: '{"Content-Type": "application/json"}'
           data: '{"query":"mutation Login{\\n  login(userType: Admin, email: \\"contato@jovensgenios.com\\", password: \\"JGs$cret1971.\\") {\\n    token\\n  }\\n}"}'
           preventFailureOnNoResponse: 'true'
+          escapeData: 'true'
+          ignoreStatusCodes: '401'
       - name: Show Response
         run: echo ${{ steps.getToken.outputs.response }}
