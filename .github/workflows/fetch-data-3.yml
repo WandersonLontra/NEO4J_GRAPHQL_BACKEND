@@ -18,19 +18,17 @@ jobs:
             -d '{"query": "mutation Login($userType: UserType!, $email: String!, $password: String!){ login(userType: $userType, email: $email, password: $password) { token } }", "variables": {"userType": "Professor", "email": "contato@jovensgenios.com", "password": "JGs$cret1971."}}' \
             https://ecs-api-stage.jovensgenios.com/graphql \
             | jq -r '.data.login.token' \
-            > token.txt
-          echo "Token:"
-          cat token.txt
+            > token.json
 
       - name: Use token to make GraphQL request
         run: |
-          token=$(cat token.txt)
+          token=$(cat token.json)
           curl -X POST \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer $token" \
             -d '{"query": "query GetProfessor{ Professor(email: "contato@jovensgenios.com") { id name email } }"}' \
             https://ecs-api-stage.jovensgenios.com/graphql \
             | jq -r '.data.Professor' \
-            > users.txt
+            > users.json
           echo "Users:"
-          cat users.txt
+          cat users.json
