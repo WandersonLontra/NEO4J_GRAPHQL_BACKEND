@@ -22,7 +22,7 @@ jobs:
 
       - name: Use token to make GraphQL request
         run: |
-          token=$(cat token.json)
+          token=$(cat token.json | jq -r '.data.login.token')
           curl -X POST \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer $token" \
