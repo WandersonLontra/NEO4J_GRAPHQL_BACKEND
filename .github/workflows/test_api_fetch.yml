@@ -3,7 +3,7 @@ name: Test fetch token from JG
 on: 
 # Triggers the workflow every minute
   schedule:
-    - cron: "*/1 * * * *"
+    - cron: "*/5 * * * *"
     
 jobs:
   get-token:
